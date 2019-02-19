@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -57,6 +56,12 @@
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 		F0081DC306EF4F0CB7767B93 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B0E27CC32C334337BFE44828 /* Foundation.ttf */; };
 		F7846EFFE0E3476C83D30168 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ED7BF1978F4C42F9891F4706 /* EvilIcons.ttf */; };
+		DC90B8E75E2C4342AD38980C /* NotoSansSC-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = A7D65893A44B4C729BD72F8C /* NotoSansSC-Black.otf */; };
+		DA785C3DDEED4D67A94541CB /* NotoSansSC-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 785C3BFB7AB440A78AFE3822 /* NotoSansSC-Bold.otf */; };
+		2CE18D1D2CAD4232A4C6BBCC /* NotoSansSC-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3B2992EE89D04CC283508EA8 /* NotoSansSC-Light.otf */; };
+		78731275A0164D65BD810C72 /* NotoSansSC-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 45D2FFE4693A49ABB4092D86 /* NotoSansSC-Medium.otf */; };
+		F9AD0E6A02C248E5B6BECB75 /* NotoSansSC-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 99BCC1D7637D48DEB5743B28 /* NotoSansSC-Regular.otf */; };
+		FC465035F9864F8F97FBB937 /* NotoSansSC-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = C9E4E701C497491A94DFA959 /* NotoSansSC-Thin.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -396,6 +401,12 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		ED7BF1978F4C42F9891F4706 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		A7D65893A44B4C729BD72F8C /* NotoSansSC-Black.otf */ = {isa = PBXFileReference; name = "NotoSansSC-Black.otf"; path = "../src/assets/fonts/NotoSansSC-Black.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		785C3BFB7AB440A78AFE3822 /* NotoSansSC-Bold.otf */ = {isa = PBXFileReference; name = "NotoSansSC-Bold.otf"; path = "../src/assets/fonts/NotoSansSC-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3B2992EE89D04CC283508EA8 /* NotoSansSC-Light.otf */ = {isa = PBXFileReference; name = "NotoSansSC-Light.otf"; path = "../src/assets/fonts/NotoSansSC-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		45D2FFE4693A49ABB4092D86 /* NotoSansSC-Medium.otf */ = {isa = PBXFileReference; name = "NotoSansSC-Medium.otf"; path = "../src/assets/fonts/NotoSansSC-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		99BCC1D7637D48DEB5743B28 /* NotoSansSC-Regular.otf */ = {isa = PBXFileReference; name = "NotoSansSC-Regular.otf"; path = "../src/assets/fonts/NotoSansSC-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C9E4E701C497491A94DFA959 /* NotoSansSC-Thin.otf */ = {isa = PBXFileReference; name = "NotoSansSC-Thin.otf"; path = "../src/assets/fonts/NotoSansSC-Thin.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -674,6 +685,12 @@
 				75DD6184E0C144639168C9BD /* Octicons.ttf */,
 				6347AC0FF8B346F392E20DBD /* SimpleLineIcons.ttf */,
 				9E0B545676BA4553AA4E1422 /* Zocial.ttf */,
+				A7D65893A44B4C729BD72F8C /* NotoSansSC-Black.otf */,
+				785C3BFB7AB440A78AFE3822 /* NotoSansSC-Bold.otf */,
+				3B2992EE89D04CC283508EA8 /* NotoSansSC-Light.otf */,
+				45D2FFE4693A49ABB4092D86 /* NotoSansSC-Medium.otf */,
+				99BCC1D7637D48DEB5743B28 /* NotoSansSC-Regular.otf */,
+				C9E4E701C497491A94DFA959 /* NotoSansSC-Thin.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1184,6 +1201,12 @@
 				5DA9B803A9C247D9B509E594 /* Octicons.ttf in Resources */,
 				5A49030048A9461D98969DD5 /* SimpleLineIcons.ttf in Resources */,
 				B8B5F82EAE02498A9B8AABD6 /* Zocial.ttf in Resources */,
+				DC90B8E75E2C4342AD38980C /* NotoSansSC-Black.otf in Resources */,
+				DA785C3DDEED4D67A94541CB /* NotoSansSC-Bold.otf in Resources */,
+				2CE18D1D2CAD4232A4C6BBCC /* NotoSansSC-Light.otf in Resources */,
+				78731275A0164D65BD810C72 /* NotoSansSC-Medium.otf in Resources */,
+				F9AD0E6A02C248E5B6BECB75 /* NotoSansSC-Regular.otf in Resources */,
+				FC465035F9864F8F97FBB937 /* NotoSansSC-Thin.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

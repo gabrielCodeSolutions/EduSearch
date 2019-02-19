@@ -2,7 +2,8 @@ const strings = {
 
     periodics: "Periódicos",
     impacts: "Impactos",
-    info: "Info"
+    info: "Info",
+    type_here: "Digite aqui..."
 
 
 };

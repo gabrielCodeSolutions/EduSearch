@@ -70,6 +70,12 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>NotoSansSC-Black.otf</string>
+		<string>NotoSansSC-Bold.otf</string>
+		<string>NotoSansSC-Light.otf</string>
+		<string>NotoSansSC-Medium.otf</string>
+		<string>NotoSansSC-Regular.otf</string>
+		<string>NotoSansSC-Thin.otf</string>
 	</array>
 </dict>
 </plist>
