@@ -10,9 +10,11 @@
     "axios": "^0.18.0",
     "react": "16.6.3",
     "react-native": "0.58.4",
+    "react-native-pdf": "^5.0.11",
     "react-native-picker-select": "^6.0.0",
     "react-native-vector-icons": "^6.3.0",
-    "react-navigation": "latest"
+    "react-navigation": "latest",
+    "rn-fetch-blob": "^0.10.15"
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
