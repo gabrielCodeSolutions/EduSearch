@@ -6,18 +6,21 @@ import {
     TouchableOpacity,
     ScrollView,
     Text,
-    Alert,
     Platform,
     SafeAreaView,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Dimensions,
+    Alert
 } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from 'axios';
 import strings from './util/Strings';
 import RNPickerSelect from 'react-native-picker-select';
 import Pdf from 'react-native-pdf';
+import Modal from "react-native-modal";
 
+const {height} = Dimensions.get('window');
 
 export default class AllTypesResearch extends Component {
 
@@ -29,7 +32,11 @@ export default class AllTypesResearch extends Component {
             articlePDFVisibility: false,
             documentUrl: "",
             loading: false,
-            offset: 0
+            offset: 0,
+            isArticleDetailsModalVisible: false,
+            articleTitle:"",
+            articleISSN: "",
+            articleJournalName: ""
 
         }
     }
@@ -72,26 +79,35 @@ export default class AllTypesResearch extends Component {
         this.setState({articlePDFVisibility: true});
     }
     ;
+    openDetailsModal(title,issn,articleJournal) {
+        this.setState({isArticleDetailsModalVisible: true});
+        this.setState({articleTitle: title});
+        this.setState({articleISSN: issn});
+        this.setState({articleJournalName: articleJournal});
 
+    }
     renderItem = ({item}) => (
         <View key={item.key} style={styles.articleListCell}>
             <View style={{flex: 1}}>
                 <TouchableOpacity onPress={() => this.openArticle(item.link)}
                                   style={styles.seeArticleTitleButton}>
                     <Text style={styles.articleTitle}>
-                        {item.title}
+                        {item.title[0]}
                     </Text>
                 </TouchableOpacity>
             </View>
             <View style={{flex: 1, alignItems: 'flex-end'}}>
-                <TouchableOpacity style={styles.seeArticleDetails}>
+                <TouchableOpacity onPress={() => this.openDetailsModal(item.title[0],item.ISSN[0])}
+                style={styles.seeArticleDetails}>
                     <Text style={styles.articleDetailsText}>
-                        Ver detalhes
+                        {strings.see_details}
                     </Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
+
+  
     renderFooter = () => {
         if (!this.state.loading) return null;
         return (
@@ -100,15 +116,51 @@ export default class AllTypesResearch extends Component {
             </View>
         );
     };
+    renderModalContent = () => (
+        <View style={styles.modalContent}>
+        <View style={styles.modalHeader}>
+        <TouchableOpacity 
+         style={styles.closeModalButton}
+        onPress= {
+            () => this.setState({isArticleDetailsModalVisible:false})
+        }>
+        <Icon
+         name={'window-close-o'} 
+         size={25} 
+         color={'#3866b5'}/>
+        </TouchableOpacity>
+         <Icon
+         style={{paddingLeft: 30}}
+         name={'file-text'} size={45} 
+         color={'#3866b5'}/>
+            </View>
+            <View style={styles.modalBody}>
 
+            <Text>{strings.journal_name}</Text>
+            <Text style={styles.completeArticleTitle}>{this.state.articleJournalName}</Text>
+            <Text>{strings.complete_title}</Text>
+            <Text style={styles.completeArticleTitle}>{this.state.articleTitle}</Text>
+            <Text>{strings.ISSN}</Text>
+            <Text style={styles.completeArticleTitle}>{this.state.articleISSN}</Text>
+            </View>
+
+        </View>
+      )
     render() {
 
         return (
 
 
             <SafeAreaView style={styles.mainContainer}>
+                            <Modal
+                             isVisible={this.state.isArticleDetailsModalVisible}
+                             style={styles.bottomModal}
+                            >
+                         {this.renderModalContent()}
+                        </Modal>
                 {!this.state.articlePDFVisibility ?
                     <Fragment>
+                            
                         <View style={styles.researchInputContainer}>
                             <View style={{flex: 1}}>
 
@@ -237,6 +289,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
     },
+    
     researchSelectContainer: {
         backgroundColor: '#3866b5',
         borderBottomWidth: 2,
@@ -282,6 +335,36 @@ const styles = StyleSheet.create({
     seeArticleTitleButton: {
         marginLeft: 10,
         marginTop: 25,
+    },
+    modalHeader:{
+        flex:1,
+        flexDirection: 'row',
+        backgroundColor: "#fff",
+        justifyContent: 'center',
+        paddingTop: 20
+    },
+    bottomModal: {
+        justifyContent: "flex-end",
+        margin: 0,
+      },
+      modalContent: {
+        backgroundColor: "#fff",
+        borderRadius: 4,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        height: height/2,
+    },
+    closeModalButton:{
+        position:'absolute',
+        left:20,
+        top:20
+    },
+    modalBody:{
+        flex:4,
+        backgroundColor: "#cecece",
+        alignItems: "center"
+    },
+    completeArticleTitle:{
+        textAlign: "center"
     }
 
 });
