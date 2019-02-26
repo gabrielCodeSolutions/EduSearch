@@ -7,7 +7,8 @@ const strings = {
     see_details: "Ver detalhes",
     complete_title: "Título completo",
     ISSN:"ISSN",
-    journal_name: "Nome da revista"
+    journal_name: "Nome da revista",
+    authors: "Autores"
 
 
 };

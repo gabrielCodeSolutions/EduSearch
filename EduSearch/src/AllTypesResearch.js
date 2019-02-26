@@ -36,7 +36,8 @@ export default class AllTypesResearch extends Component {
             isArticleDetailsModalVisible: false,
             articleTitle:"",
             articleISSN: "",
-            articleJournalName: ""
+            articleJournalName: "",
+            articleAuthors: []
 
         }
     }
@@ -79,11 +80,13 @@ export default class AllTypesResearch extends Component {
         this.setState({articlePDFVisibility: true});
     }
     ;
-    openDetailsModal(title,issn,articleJournal) {
+    openDetailsModal(title,issn,articleAuthors,articleJournal) {
+        console.log("Autores",articleAuthors);
         this.setState({isArticleDetailsModalVisible: true});
         this.setState({articleTitle: title});
         this.setState({articleISSN: issn});
         this.setState({articleJournalName: articleJournal});
+        this.setState({articleAuthors: articleAuthors});
 
     }
     renderItem = ({item}) => (
@@ -97,7 +100,7 @@ export default class AllTypesResearch extends Component {
                 </TouchableOpacity>
             </View>
             <View style={{flex: 1, alignItems: 'flex-end'}}>
-                <TouchableOpacity onPress={() => this.openDetailsModal(item.title[0],item.ISSN[0])}
+                <TouchableOpacity onPress={() => this.openDetailsModal(item.title[0],item.ISSN[0],item.author,item['container-title'][0])}
                 style={styles.seeArticleDetails}>
                     <Text style={styles.articleDetailsText}>
                         {strings.see_details}
@@ -130,20 +133,31 @@ export default class AllTypesResearch extends Component {
          color={'#3866b5'}/>
         </TouchableOpacity>
          <Icon
-         style={{paddingLeft: 30}}
+        
          name={'file-text'} size={45} 
          color={'#3866b5'}/>
             </View>
+           
             <View style={styles.modalBody}>
-
-            <Text>{strings.journal_name}</Text>
+            <ScrollView>
+            <Text style={styles.modalItensTitles}>{strings.journal_name}</Text>
             <Text style={styles.completeArticleTitle}>{this.state.articleJournalName}</Text>
-            <Text>{strings.complete_title}</Text>
+            <Text style={styles.modalItensTitles}>{strings.complete_title}</Text>
             <Text style={styles.completeArticleTitle}>{this.state.articleTitle}</Text>
-            <Text>{strings.ISSN}</Text>
+            <Text style={styles.modalItensTitles}>{strings.ISSN}</Text>
             <Text style={styles.completeArticleTitle}>{this.state.articleISSN}</Text>
+            
+            <Text style={styles.modalItensTitles}>{strings.authors}</Text>
+            {
+                this.state.articleAuthors.map((item, i) => {
+                  return (
+                    <Text key={i} style={styles.completeArticleTitle}>{item.family}, {item.given}</Text>
+                  )
+                })
+              }
+               </ScrollView>
             </View>
-
+           
         </View>
       )
     render() {
@@ -360,11 +374,19 @@ const styles = StyleSheet.create({
     },
     modalBody:{
         flex:4,
-        backgroundColor: "#cecece",
-        alignItems: "center"
+        alignItems: "center",
+        paddingRight:20,
+        paddingLeft:20,
     },
     completeArticleTitle:{
+        textAlign: "center",
+        fontFamily: 'NotoSansSC-Black',
+    },
+    modalItensTitles:{
+        fontFamily: 'NotoSansSC-Bold',
+        color: '#3866b5',
         textAlign: "center"
+
     }
 
 });
