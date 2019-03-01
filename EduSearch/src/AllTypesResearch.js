@@ -19,6 +19,8 @@ import strings from './util/Strings';
 import RNPickerSelect from 'react-native-picker-select';
 import Pdf from 'react-native-pdf';
 import Modal from "react-native-modal";
+import firebase from "react-native-firebase";
+
 
 const {height} = Dimensions.get('window');
 
@@ -47,8 +49,17 @@ export default class AllTypesResearch extends Component {
         * Ex: Primeira chamada a API
         * Os trabalhos estão em res.data.message.items
         * */
-        this.loadArticles();
+       // this.loadArticles();
 
+       this.readUserData();
+
+
+    }
+
+    readUserData = () =>  {
+     firebase.database().ref().once('value', function (snapshot) {
+            console.log(snapshot.val())
+        })
     }
 
     loadArticles = async () => {

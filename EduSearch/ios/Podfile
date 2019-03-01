@@ -6,6 +6,8 @@ target 'EduSearch' do
   # use_frameworks!
 
   pod 'Firebase/Core'
+  pod 'Firebase/Database'
+
 
   target 'EduSearchTests' do
     inherit! :search_paths

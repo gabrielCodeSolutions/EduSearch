@@ -138,6 +138,10 @@ dependencies {
     implementation project(':react-native-pdf')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-vector-icons')
+    //Firebase dependencies 
+     compile "com.google.android.gms:play-services-base:11.6.0"
+     compile "com.google.firebase:firebase-core:11.6.0 "
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -149,3 +153,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'
