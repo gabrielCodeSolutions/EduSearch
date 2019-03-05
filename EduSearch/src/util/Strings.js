@@ -6,9 +6,15 @@ const strings = {
     type_here: "Digite aqui...",
     see_details: "Ver detalhes",
     complete_title: "Título completo",
-    ISSN:"ISSN",
+    ISSN: "ISSN",
     journal_name: "Nome da revista",
-    authors: "Autores"
+    authors: "Autores",
+    paper: "Revistas",
+    keywords: "Palavras-chave",
+    author: "Autor",
+    not_available_paper: "Revista indisponível",
+    not_available_articles: "Não há mais artigos disponíveis",
+    no_itens_searched_yet: "Nenhum item pesquisado"
 
 
 };

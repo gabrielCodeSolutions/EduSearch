@@ -30,16 +30,19 @@ export default class AllTypesResearch extends Component {
         super(props);
         this.state = {
             articles: [],
-            searchType: "",
+            searchType: "Autor",
             articlePDFVisibility: false,
             documentUrl: "",
             loading: false,
             offset: 0,
             isArticleDetailsModalVisible: false,
-            articleTitle:"",
+            articleTitle: "",
             articleISSN: "",
             articleJournalName: "",
-            articleAuthors: []
+            articleAuthors: [],
+            stringToSearch: "",
+            firebasePapers: [],
+            searchStarted: false
 
         }
     }
@@ -49,39 +52,18 @@ export default class AllTypesResearch extends Component {
         * Ex: Primeira chamada a API
         * Os trabalhos estão em res.data.message.items
         * */
-       // this.loadArticles();
-
-       this.readUserData();
+        this.readJournalsDataFromFirebase();
 
 
     }
 
-    readUserData = () =>  {
-     firebase.database().ref().once('value', function (snapshot) {
-            console.log(snapshot.val())
-        })
-    }
-
-    loadArticles = async () => {
-        if (this.state.loading) return;
-        const {offset} = this.state;
-
-        this.setState({loading: true});
-        axios.get(`https://api.crossref.org/journals/0101-7330/works?filter=type:journal-article&offset=${this.state.offset}`)
-            .then(res => {
-                const works = res.data.message.items;
-                if(works.length === 0){
-                    //Abrir alerta informando que não há mais artigos disponíveis.
-                }
-                this.setState({
-                    articles: [...this.state.articles, ...works],
-                    loading: false,
-                    offset: offset + 20
-                });
-            })
-
+    readJournalsDataFromFirebase = () => {
+        firebase.database().ref().once('value').then(snapshot => {
+            this.setState({firebasePapers: snapshot.val()});
+        });
 
     }
+
 
     // Resto da classe
 
@@ -91,8 +73,8 @@ export default class AllTypesResearch extends Component {
         this.setState({articlePDFVisibility: true});
     }
     ;
-    openDetailsModal(title,issn,articleAuthors,articleJournal) {
-        console.log("Autores",articleAuthors);
+
+    openDetailsModal(title, issn, articleAuthors, articleJournal) {
         this.setState({isArticleDetailsModalVisible: true});
         this.setState({articleTitle: title});
         this.setState({articleISSN: issn});
@@ -100,6 +82,7 @@ export default class AllTypesResearch extends Component {
         this.setState({articleAuthors: articleAuthors});
 
     }
+
     renderItem = ({item}) => (
         <View key={item.key} style={styles.articleListCell}>
             <View style={{flex: 1}}>
@@ -111,8 +94,9 @@ export default class AllTypesResearch extends Component {
                 </TouchableOpacity>
             </View>
             <View style={{flex: 1, alignItems: 'flex-end'}}>
-                <TouchableOpacity onPress={() => this.openDetailsModal(item.title[0],item.ISSN[0],item.author,item['container-title'][0])}
-                style={styles.seeArticleDetails}>
+                <TouchableOpacity
+                    onPress={() => this.openDetailsModal(item.title[0], item.ISSN[0], item.author, item['container-title'][0])}
+                    style={styles.seeArticleDetails}>
                     <Text style={styles.articleDetailsText}>
                         {strings.see_details}
                     </Text>
@@ -121,7 +105,7 @@ export default class AllTypesResearch extends Component {
         </View>
     );
 
-  
+
     renderFooter = () => {
         if (!this.state.loading) return null;
         return (
@@ -132,129 +116,213 @@ export default class AllTypesResearch extends Component {
     };
     renderModalContent = () => (
         <View style={styles.modalContent}>
-        <View style={styles.modalHeader}>
-        <TouchableOpacity 
-         style={styles.closeModalButton}
-        onPress= {
-            () => this.setState({isArticleDetailsModalVisible:false})
-        }>
-        <Icon
-         name={'window-close-o'} 
-         size={25} 
-         color={'#3866b5'}/>
-        </TouchableOpacity>
-         <Icon
-        
-         name={'file-text'} size={45} 
-         color={'#3866b5'}/>
+            <View style={styles.modalHeader}>
+                <TouchableOpacity
+                    style={styles.closeModalButton}
+                    onPress={
+                        () => this.setState({isArticleDetailsModalVisible: false})
+                    }>
+                    <Icon
+                        name={'window-close-o'}
+                        size={25}
+                        color={'#3866b5'}/>
+                </TouchableOpacity>
+                <Icon
+
+                    name={'file-text'} size={45}
+                    color={'#3866b5'}/>
             </View>
-           
+
             <View style={styles.modalBody}>
-            <ScrollView>
-            <Text style={styles.modalItensTitles}>{strings.journal_name}</Text>
-            <Text style={styles.completeArticleTitle}>{this.state.articleJournalName}</Text>
-            <Text style={styles.modalItensTitles}>{strings.complete_title}</Text>
-            <Text style={styles.completeArticleTitle}>{this.state.articleTitle}</Text>
-            <Text style={styles.modalItensTitles}>{strings.ISSN}</Text>
-            <Text style={styles.completeArticleTitle}>{this.state.articleISSN}</Text>
-            
-            <Text style={styles.modalItensTitles}>{strings.authors}</Text>
-            {
-                this.state.articleAuthors.map((item, i) => {
-                  return (
-                    <Text key={i} style={styles.completeArticleTitle}>{item.family}, {item.given}</Text>
-                  )
-                })
-              }
-               </ScrollView>
+                <ScrollView>
+                    <Text style={styles.modalItensTitles}>{strings.journal_name}</Text>
+                    <Text style={styles.completeArticleTitle}>{this.state.articleJournalName}</Text>
+                    <Text style={styles.modalItensTitles}>{strings.complete_title}</Text>
+                    <Text style={styles.completeArticleTitle}>{this.state.articleTitle}</Text>
+                    <Text style={styles.modalItensTitles}>{strings.ISSN}</Text>
+                    <Text style={styles.completeArticleTitle}>{this.state.articleISSN}</Text>
+
+                    <Text style={styles.modalItensTitles}>{strings.authors}</Text>
+                    {
+                        this.state.articleAuthors.map((item, i) => {
+                            return (
+                                <Text key={i} style={styles.completeArticleTitle}>{item.family}, {item.given}</Text>
+                            )
+                        })
+                    }
+                </ScrollView>
             </View>
-           
+
         </View>
-      )
+    )
+    doResearch = async () => {
+        if (this.state.searchType === strings.paper) {
+            this.setState({loading: true});
+            this.setState({articles: []});
+            this.setState({searchStarted: true});
+
+            let journalFound = false;
+
+            for (let i = 0; i < this.state.firebasePapers.length; i++) {
+                if (this.state.stringToSearch.toUpperCase().trim() === this.state.firebasePapers[i].Título.toUpperCase().trim()) {
+                    journalFound = true;
+                    this.loadPaperSearchArticles(this.state.firebasePapers[i].ISSN);
+                    break;
+                }
+            }
+            if (journalFound === false) {
+                Alert.alert(strings.not_available_paper);
+                this.setState({loading: false});
+            }
+        } else if (this.state.searchType === strings.author) {
+            this.loadAuthorSearchArticles();
+        } else if (this.state.searchType === strings.keywords) {
+
+        }
+    }
+    loadAuthorSearchArticles = async () => {
+        this.setState({loading: true});
+        axios.get(`https://api.crossref.org/works?query.author=${this.state.stringToSearch}`)
+            .then(res => {
+                const works = res.data.message.items;
+                let worksToBeShown = [];
+                for (let j = 0; j < works.length; j++) {
+                    for (let i = 0; i < this.state.firebasePapers.length; i++) {
+                        if (works[j]['container-title'][0].toUpperCase().trim() === this.state.firebasePapers[i].Título.toUpperCase().trim()) {
+                            worksToBeShown.push(works[i]);
+                        }
+                    }
+                }
+                this.setState({
+                    articles: [...this.state.articles, ...worksToBeShown],
+                    loading: false,
+                });
+            }).catch(error => {
+
+        })
+
+    };
+    loadPaperSearchArticles = async (paperISSN) => {
+        const {offset} = this.state;
+        axios.get(`https://api.crossref.org/journals/${paperISSN}/works?filter=type:journal-article&offset=${this.state.offset}`)
+            .then(res => {
+                const works = res.data.message.items;
+                if (works.length === 0) {
+                    Alert.alert(strings.not_available_articles);
+                    this.setState({loading: false})
+                }
+                this.setState({
+                    articles: [...this.state.articles, ...works],
+                    loading: false,
+                    offset: offset + 20
+                });
+            }).catch((error) => {
+            Alert.alert(strings.not_available_paper);
+            this.setState({loading: false});
+        })
+    }
+
     render() {
 
         return (
 
 
             <SafeAreaView style={styles.mainContainer}>
-                            <Modal
-                             isVisible={this.state.isArticleDetailsModalVisible}
-                             style={styles.bottomModal}
-                            >
-                         {this.renderModalContent()}
-                        </Modal>
-                {!this.state.articlePDFVisibility ?
+                <Modal
+                    isVisible={this.state.isArticleDetailsModalVisible}
+                    style={styles.bottomModal}
+                >
+                    {this.renderModalContent()}
+                </Modal>
+
+                {
+                    !this.state.articlePDFVisibility && 
                     <Fragment>
-                            
-                        <View style={styles.researchInputContainer}>
-                            <View style={{flex: 1}}>
+                    <View style={styles.researchInputContainer}>
+                    <View style={{flex: 1}}>
 
-                                <TouchableOpacity>
-                                    <Icon
-                                        style={{paddingLeft: 30}}
-                                        name={'search'} size={25} color={'#ffb131'}/>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{flex: 4}}>
-                                <TextInput style={styles.researchInput}
-                                           placeholder={strings.type_here}
-                                           placeholderTextColor="#2A5082"
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.researchSelectContainer}>
-                            <RNPickerSelect
-                                useNativeAndroidPickerStyle={false}
-                                style={{...pickerSelectStyles}}
-                                placeholder={{}}
-                                hideIcon={true}
-                                items={[{
-                                    label: "Autor",
-                                    value: 'Autor',
-                                },
-                                    {
-                                        label: "Palavra-chave",
-                                        value: 'Palavra-chave',
-                                    },
-                                    {
-                                        label: "Revista",
-                                        value: "Revista"
-                                    }
-
-                                ]}
-                                onValueChange={(value) => {
-                                    this.setState({searchType: value});
-                                }}
-                                onUpArrow={() => {
-                                    //  this.inputRefs.name.focus();
-                                }}
-                                onDownArrow={() => {
-                                    //  this.inputRefs.picker2.togglePicker();
-                                }}
-
-                                value={this.state.searchType}
-
-                            />
-                            <View style={styles.dropDownIcon}>
-                                <Icon
-                                    name={'sort-desc'} size={25} color={'#ffb131'}/>
-                            </View>
-                        </View>
-
-                        <FlatList
-                            style={{marginTop: 30}}
-                            contentContainerStyle={styles.list}
-                            data={this.state.articles}
-                            renderItem={this.renderItem}
-                            keyExtractor={item => item.id}
-                            onEndReached={this.loadArticles}
-                            onEndReachedThreshold={0.2}
-                            ListFooterComponent={this.renderFooter}
-
+                        <TouchableOpacity onPress={() => this.doResearch()}>
+                            <Icon
+                                style={{paddingLeft: 30}}
+                                name={'search'} size={25} color={'#ffb131'}/>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{flex: 4}}>
+                        <TextInput style={styles.researchInput}
+                                   placeholder={strings.type_here}
+                                   placeholderTextColor="#2A5082"
+                                   onChangeText={texto => this.setState({stringToSearch: texto})}
                         />
+                    </View>
+                </View>
+                <View style={styles.researchSelectContainer}>
+                    <RNPickerSelect
+                        useNativeAndroidPickerStyle={false}
+                        style={{...pickerSelectStyles}}
+                        placeholder={{}}
+                        hideIcon={true}
+                        items={[{
+                            label: strings.author,
+                            value: strings.author,
+                        },
+                            {
+                                label: strings.keywords,
+                                value: strings.keywords,
+                            },
+                            {
+                                label: strings.paper,
+                                value: strings.paper
+                            }
+
+                        ]}
+                        onValueChange={(value) => {
+                            this.setState({searchType: value});
+                        }}
+                        onUpArrow={() => {
+                        }}
+                        onDownArrow={() => {
+                        }}
+
+                        value={this.state.searchType}
+
+                    />
+                    <View style={styles.dropDownIcon}>
+                        <Icon
+                            name={'sort-desc'} size={25} color={'#ffb131'}/>
+                    </View>
+                </View>
+                </Fragment>
+                }
+               
+
+                {
+                    !this.state.searchStarted &&
+                    <View style={styles.searchNotStartedContainer}>
+                        <Icon
+                           
+                            name={'search'} size={25} color={'#ffb131'}/>
+                        <Text style={styles.searchNotStartedText}>{strings.no_itens_searched_yet}</Text>
+                    </View>
+                }
+                {!this.state.articlePDFVisibility && this.state.searchStarted &&
+                <Fragment>
+                    <FlatList
+                        style={{marginTop: 30}}
+                        contentContainerStyle={styles.list}
+                        data={this.state.articles}
+                        renderItem={this.renderItem}
+                        keyExtractor={item => item.id}
+                        onEndReached={this.loadArticles}
+                        onEndReachedThreshold={0.2}
+                        ListFooterComponent={this.renderFooter}
+
+                    />
 
 
-                    </Fragment> :
+                </Fragment>}
+
+                {
+                    this.state.articlePDFVisibility && this.state.searchStarted &&
                     <SafeAreaView style={{flex: 1}}>
                         <TouchableOpacity onPress={() => this.setState({articlePDFVisibility: false})}>
                             <Icon
@@ -274,6 +342,7 @@ export default class AllTypesResearch extends Component {
                             style={{flex: 1}}/>
 
                     </SafeAreaView>
+
                 }
 
 
@@ -314,7 +383,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
     },
-    
+
     researchSelectContainer: {
         backgroundColor: '#3866b5',
         borderBottomWidth: 2,
@@ -361,8 +430,8 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginTop: 25,
     },
-    modalHeader:{
-        flex:1,
+    modalHeader: {
+        flex: 1,
         flexDirection: 'row',
         backgroundColor: "#fff",
         justifyContent: 'center',
@@ -371,33 +440,44 @@ const styles = StyleSheet.create({
     bottomModal: {
         justifyContent: "flex-end",
         margin: 0,
-      },
-      modalContent: {
+    },
+    modalContent: {
         backgroundColor: "#fff",
         borderRadius: 4,
         borderColor: "rgba(0, 0, 0, 0.1)",
-        height: height/2,
+        height: height / 2,
     },
-    closeModalButton:{
-        position:'absolute',
-        left:20,
-        top:20
+    closeModalButton: {
+        position: 'absolute',
+        left: 20,
+        top: 20
     },
-    modalBody:{
-        flex:4,
+    modalBody: {
+        flex: 4,
         alignItems: "center",
-        paddingRight:20,
-        paddingLeft:20,
+        paddingRight: 20,
+        paddingLeft: 20,
     },
-    completeArticleTitle:{
+    completeArticleTitle: {
         textAlign: "center",
         fontFamily: 'NotoSansSC-Black',
     },
-    modalItensTitles:{
+    modalItensTitles: {
         fontFamily: 'NotoSansSC-Bold',
-        color: '#3866b5',
+        color: '#3866b5', 
         textAlign: "center"
 
+    },
+    searchNotStartedContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex:1,
+    },
+    searchNotStartedText: {
+        textAlign: 'center',
+        fontFamily: 'NotoSansSC-Bold',
+        fontSize: 16,
+        color: '#3866b5'
     }
 
 });
