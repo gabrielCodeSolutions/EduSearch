@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "366718999209",
+    "firebase_url": "https://edusearch-32e40.firebaseio.com",
+    "project_id": "edusearch-32e40",
+    "storage_bucket": "edusearch-32e40.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366718999209:android:ffcd6043f45bb7c7",
+        "android_client_info": {
+          "package_name": "com.edusearch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366718999209-o18t0q93rklqjjn2fuv41fdkrmqlj9s8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbY-cJa7NdMg9Ln1oqP0Xeu95Eua4au8s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

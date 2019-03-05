@@ -4,6 +4,7 @@ const strings = {
     impacts: "Impactos",
     info: "Info",
     type_here: "Digite aqui...",
+    type_paper_name: "Digite o nome da revista aqui...",
     see_details: "Ver detalhes",
     complete_title: "Título completo",
     ISSN: "ISSN",
@@ -15,7 +16,14 @@ const strings = {
     not_available_paper: "Revista indisponível",
     not_available_articles: "Não há mais artigos disponíveis",
     no_itens_searched_yet: "Nenhum item pesquisado",
-    unavailable_or_not_found_journal: "Item pesquisado inexistente ou indisponível"
+    unavailable_or_not_found_journal: "Item pesquisado inexistente ou indisponível",
+    fiveJIF: "5JIF",
+    article_influence: "Article Influence",
+    eigenfactor: "Eigenfactor",
+    estrato: "Estrato",
+    hindex_five: "Hindex5",
+    hindex_sjr: "HindexSJR",
+    jif: "JIF"
 
 
 };

@@ -164,7 +164,9 @@ export default class AllTypesResearch extends Component {
             let journalFound = false;
 
             for (let i = 0; i < this.state.firebasePapers.length; i++) {
-                if (this.state.stringToSearch.toUpperCase().trim() === this.state.firebasePapers[i].Título.toUpperCase().trim()) {
+                let stringToSearchWithNoSpace = this.state.stringToSearch.replace(/\s/g, "").toUpperCase().trim();
+                let articleTitleString = this.state.firebasePapers[i].Título.replace(/\s/g, "").toUpperCase().trim();
+                if (stringToSearchWithNoSpace === articleTitleString) {
                     journalFound = true;
                     this.setState({
                         issnToBeSearched: this.state.firebasePapers[i].ISSN,
