@@ -14,7 +14,8 @@ const strings = {
     author: "Autor",
     not_available_paper: "Revista indisponível",
     not_available_articles: "Não há mais artigos disponíveis",
-    no_itens_searched_yet: "Nenhum item pesquisado"
+    no_itens_searched_yet: "Nenhum item pesquisado",
+    unavailable_or_not_found_journal: "Item pesquisado inexistente ou indisponível"
 
 
 };

@@ -42,7 +42,9 @@ export default class AllTypesResearch extends Component {
             articleAuthors: [],
             stringToSearch: "",
             firebasePapers: [],
-            searchStarted: false
+            searchStarted: false,
+            issnToBeSearched: "",
+            unavailableOrNotFoundPaper: false
 
         }
     }
@@ -53,8 +55,6 @@ export default class AllTypesResearch extends Component {
         * Os trabalhos estão em res.data.message.items
         * */
         this.readJournalsDataFromFirebase();
-
-
     }
 
     readJournalsDataFromFirebase = () => {
@@ -166,13 +166,19 @@ export default class AllTypesResearch extends Component {
             for (let i = 0; i < this.state.firebasePapers.length; i++) {
                 if (this.state.stringToSearch.toUpperCase().trim() === this.state.firebasePapers[i].Título.toUpperCase().trim()) {
                     journalFound = true;
-                    this.loadPaperSearchArticles(this.state.firebasePapers[i].ISSN);
+                    this.setState({
+                        issnToBeSearched: this.state.firebasePapers[i].ISSN,
+                        unavailableOrNotFoundPaper: false
+                    }, () => {
+                        this.loadPaperSearchArticles();
+                    });
                     break;
                 }
             }
             if (journalFound === false) {
-                Alert.alert(strings.not_available_paper);
+                //Alert.alert(strings.not_available_paper);
                 this.setState({loading: false});
+                this.setState({unavailableOrNotFoundPaper: true})
             }
         } else if (this.state.searchType === strings.author) {
             this.loadAuthorSearchArticles();
@@ -202,9 +208,10 @@ export default class AllTypesResearch extends Component {
         })
 
     };
-    loadPaperSearchArticles = async (paperISSN) => {
+    loadPaperSearchArticles = async () => {
         const {offset} = this.state;
-        axios.get(`https://api.crossref.org/journals/${paperISSN}/works?filter=type:journal-article&offset=${this.state.offset}`)
+        this.setState({loading: true});
+        axios.get(`https://api.crossref.org/journals/${this.state.issnToBeSearched}/works?filter=type:journal-article&offset=${this.state.offset}`)
             .then(res => {
                 const works = res.data.message.items;
                 if (works.length === 0) {
@@ -236,75 +243,83 @@ export default class AllTypesResearch extends Component {
                 </Modal>
 
                 {
-                    !this.state.articlePDFVisibility && 
+                    !this.state.articlePDFVisibility &&
                     <Fragment>
-                    <View style={styles.researchInputContainer}>
-                    <View style={{flex: 1}}>
+                        <View style={styles.researchInputContainer}>
+                            <View style={{flex: 1}}>
 
-                        <TouchableOpacity onPress={() => this.doResearch()}>
-                            <Icon
-                                style={{paddingLeft: 30}}
-                                name={'search'} size={25} color={'#ffb131'}/>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{flex: 4}}>
-                        <TextInput style={styles.researchInput}
-                                   placeholder={strings.type_here}
-                                   placeholderTextColor="#2A5082"
-                                   onChangeText={texto => this.setState({stringToSearch: texto})}
-                        />
-                    </View>
-                </View>
-                <View style={styles.researchSelectContainer}>
-                    <RNPickerSelect
-                        useNativeAndroidPickerStyle={false}
-                        style={{...pickerSelectStyles}}
-                        placeholder={{}}
-                        hideIcon={true}
-                        items={[{
-                            label: strings.author,
-                            value: strings.author,
-                        },
-                            {
-                                label: strings.keywords,
-                                value: strings.keywords,
-                            },
-                            {
-                                label: strings.paper,
-                                value: strings.paper
-                            }
+                                <TouchableOpacity onPress={() => this.doResearch()}>
+                                    <Icon
+                                        style={{paddingLeft: 30}}
+                                        name={'search'} size={25} color={'#ffb131'}/>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{flex: 4}}>
+                                <TextInput style={styles.researchInput}
+                                           placeholder={strings.type_here}
+                                           placeholderTextColor="#2A5082"
+                                           onChangeText={texto => this.setState({stringToSearch: texto})}
+                                />
+                            </View>
+                        </View>
+                        <View style={styles.researchSelectContainer}>
+                            <RNPickerSelect
+                                useNativeAndroidPickerStyle={false}
+                                style={{...pickerSelectStyles}}
+                                placeholder={{}}
+                                hideIcon={true}
+                                items={[{
+                                    label: strings.author,
+                                    value: strings.author,
+                                },
+                                    {
+                                        label: strings.keywords,
+                                        value: strings.keywords,
+                                    },
+                                    {
+                                        label: strings.paper,
+                                        value: strings.paper
+                                    }
 
-                        ]}
-                        onValueChange={(value) => {
-                            this.setState({searchType: value});
-                        }}
-                        onUpArrow={() => {
-                        }}
-                        onDownArrow={() => {
-                        }}
+                                ]}
+                                onValueChange={(value) => {
+                                    this.setState({searchType: value});
+                                }}
+                                onUpArrow={() => {
+                                }}
+                                onDownArrow={() => {
+                                }}
 
-                        value={this.state.searchType}
+                                value={this.state.searchType}
 
-                    />
-                    <View style={styles.dropDownIcon}>
-                        <Icon
-                            name={'sort-desc'} size={25} color={'#ffb131'}/>
-                    </View>
-                </View>
-                </Fragment>
+                            />
+                            <View style={styles.dropDownIcon}>
+                                <Icon
+                                    name={'sort-desc'} size={25} color={'#ffb131'}/>
+                            </View>
+                        </View>
+                    </Fragment>
                 }
-               
+
 
                 {
                     !this.state.searchStarted &&
                     <View style={styles.searchNotStartedContainer}>
                         <Icon
-                           
+
                             name={'search'} size={25} color={'#ffb131'}/>
                         <Text style={styles.searchNotStartedText}>{strings.no_itens_searched_yet}</Text>
                     </View>
                 }
-                {!this.state.articlePDFVisibility && this.state.searchStarted &&
+                {
+                    this.state.unavailableOrNotFoundPaper &&
+                    <View style={styles.unavailableOrNotFoundJournalContainer}>
+                        <Icon name={'search'} size={25} color={'#ffb131'}/>
+                        <Text
+                            style={styles.unavailableOrNotFoundJournalText}>{strings.unavailable_or_not_found_journal}</Text>
+                    </View>
+                }
+                {!this.state.articlePDFVisibility && this.state.searchStarted && !this.state.unavailableOrNotFoundPaper &&
                 <Fragment>
                     <FlatList
                         style={{marginTop: 30}}
@@ -312,7 +327,7 @@ export default class AllTypesResearch extends Component {
                         data={this.state.articles}
                         renderItem={this.renderItem}
                         keyExtractor={item => item.id}
-                        onEndReached={this.loadArticles}
+                        onEndReached={this.loadPaperSearchArticles}
                         onEndReachedThreshold={0.2}
                         ListFooterComponent={this.renderFooter}
 
@@ -322,7 +337,7 @@ export default class AllTypesResearch extends Component {
                 </Fragment>}
 
                 {
-                    this.state.articlePDFVisibility && this.state.searchStarted &&
+                    this.state.articlePDFVisibility && this.state.searchStarted && !this.state.unavailableOrNotFoundPaper &&
                     <SafeAreaView style={{flex: 1}}>
                         <TouchableOpacity onPress={() => this.setState({articlePDFVisibility: false})}>
                             <Icon
@@ -464,16 +479,29 @@ const styles = StyleSheet.create({
     },
     modalItensTitles: {
         fontFamily: 'NotoSansSC-Bold',
-        color: '#3866b5', 
+        color: '#3866b5',
         textAlign: "center"
 
     },
     searchNotStartedContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        flex:1,
+        flex: 1,
+    },
+    unavailableOrNotFoundJournalContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginRight: 10,
+        marginLeft: 10,
     },
     searchNotStartedText: {
+        textAlign: 'center',
+        fontFamily: 'NotoSansSC-Bold',
+        fontSize: 16,
+        color: '#3866b5'
+    },
+    unavailableOrNotFoundJournalText: {
         textAlign: 'center',
         fontFamily: 'NotoSansSC-Bold',
         fontSize: 16,
