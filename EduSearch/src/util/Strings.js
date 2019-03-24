@@ -23,7 +23,8 @@ const strings = {
     estrato: "Estrato",
     hindex_five: "Hindex5",
     hindex_sjr: "HindexSJR",
-    jif: "JIF"
+    jif: "JIF",
+    see_all_articles: "Ver todos os artigos"
 
 
 };

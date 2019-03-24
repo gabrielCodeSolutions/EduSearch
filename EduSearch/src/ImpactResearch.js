@@ -48,8 +48,13 @@ export default class ImpactResearch extends Component {
         this.readJournalsDataFromFirebase();
     }
 
+    seeAllArticles(){
+        this.readJournalsDataFromFirebase();   
+    }
+
     readJournalsDataFromFirebase = () => {
         this.setState({loading: true});
+        this.setState({articles: []});
         firebase.database().ref().once('value').then(snapshot => {
             this.setState({articles: snapshot.val(), loading: false, firebasePapers: snapshot.val()});
         });
@@ -144,6 +149,7 @@ export default class ImpactResearch extends Component {
 
         </View>
     )
+   
     doResearch = async () => {
         this.setState({loading: true});
         this.setState({articles: []});
@@ -202,6 +208,15 @@ export default class ImpactResearch extends Component {
                                    onChangeText={texto => this.setState({stringToSearch: texto})}
                         />
                     </View>
+                </View>
+                <View style={styles.seeAllArticlesContainer}>
+                    <TouchableOpacity onPress={() => this.seeAllArticles()}>
+                    <View style={{flex: 1}}>
+                        <Text style={styles.researchInput}>
+                        {strings.see_all_articles}
+                        </Text>
+                    </View>
+                    </TouchableOpacity>
                 </View>
 
 
@@ -378,6 +393,19 @@ const styles = StyleSheet.create({
         fontFamily: 'NotoSansSC-Bold',
         fontSize: 16,
         color: '#3866b5'
+    },
+    seeAllArticlesContainer:{
+        backgroundColor: '#3866b5',
+        borderBottomWidth: 2,
+        borderBottomColor: '#ffb131',
+        height: 60,
+        marginRight: 50,
+        marginLeft: 50,
+        marginTop: 20,
+        borderRadius: 30,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 
 });
