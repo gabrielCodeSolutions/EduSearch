@@ -68,9 +68,13 @@ export default class AllTypesResearch extends Component {
     // Resto da classe
 
 
-    openArticle(link) {
-        this.setState({documentUrl: link[0].URL});
-        this.setState({articlePDFVisibility: true});
+    openArticle(item) {
+        if (item.link) {
+            this.setState({documentUrl: item.link[0].URL});
+            this.setState({articlePDFVisibility: true});
+        } else {
+            Alert.alert(strings.not_available_article);
+        }
     }
     ;
 
@@ -86,7 +90,7 @@ export default class AllTypesResearch extends Component {
     renderItem = ({item}) => (
         <View key={item.key} style={styles.articleListCell}>
             <View style={{flex: 1}}>
-                <TouchableOpacity onPress={() => this.openArticle(item.link)}
+                <TouchableOpacity onPress={() => this.openArticle(item)}
                                   style={styles.seeArticleTitleButton}>
                     <Text style={styles.articleTitle}>
                         {item.title[0]}
