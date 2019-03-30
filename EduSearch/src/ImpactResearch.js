@@ -37,6 +37,7 @@ export default class ImpactResearch extends Component {
             hindexfive: "",
             hindexSjr: "",
             jif: "",
+            topsis: "",
             paperTitle: "",
             paperISSN: ""
 
@@ -61,7 +62,7 @@ export default class ImpactResearch extends Component {
 
     }
 
-    openDetailsModal(fivejif, articleInfluence, eigen, estrato, hindexFive, hindexSJR, jif, paperTitle, issn) {
+    openDetailsModal(fivejif, articleInfluence, eigen, estrato, hindexFive, hindexSJR, jif, paperTitle, issn,topsis) {
         this.setState({isArticleDetailsModalVisible: true});
         this.setState({articleISSN: issn});
         this.setState({fiveJIFs: fivejif});
@@ -73,6 +74,7 @@ export default class ImpactResearch extends Component {
         this.setState({jif: jif});
         this.setState({paperTitle: paperTitle});
         this.setState({paperISSN: issn});
+        this.setState({topsis:topsis});
 
     }
 
@@ -86,7 +88,7 @@ export default class ImpactResearch extends Component {
             <View style={{flex: 1, alignItems: 'flex-end'}}>
                 <TouchableOpacity
                     onPress={() => this.openDetailsModal(item['5JIF'], item['Article_influence'], item['Eigenfactor'], item['Estrato'],
-                        item['Hindex5'], item['HindexSJR'], item['JIF'], item['Título'], item['ISSN'])}
+                        item['Hindex5'], item['HindexSJR'], item['JIF'], item['Título'], item['ISSN'],item['topsis'])}
                     style={styles.seeArticleDetails}>
                     <Text style={styles.articleDetailsText}>
                         {strings.see_details}
@@ -126,10 +128,13 @@ export default class ImpactResearch extends Component {
 
             <View style={styles.modalBody}>
                 <ScrollView>
+                    
                     <Text style={styles.modalItensTitles}>{strings.journal_name}</Text>
                     <Text style={styles.completeArticleTitle}>{this.state.paperTitle}</Text>
                     <Text style={styles.modalItensTitles}>{strings.ISSN}</Text>
                     <Text style={styles.completeArticleTitle}>{this.state.paperISSN}</Text>
+                    <Text style={styles.modalItensTitles}>{strings.topsis}</Text>
+                    <Text style={styles.completeArticleTitle}>{this.state.topsis}</Text>
                     <Text style={styles.modalItensTitles}>{strings.fiveJIF}</Text>
                     <Text style={styles.completeArticleTitle}>{this.state.fiveJIFs}</Text>
                     <Text style={styles.modalItensTitles}>{strings.article_influence}</Text>
@@ -144,6 +149,7 @@ export default class ImpactResearch extends Component {
                     <Text style={styles.completeArticleTitle}>{this.state.hindexSjr}</Text>
                     <Text style={styles.modalItensTitles}>{strings.jif}</Text>
                     <Text style={styles.completeArticleTitle}>{this.state.jif}</Text>
+                    
                 </ScrollView>
             </View>
 

@@ -24,7 +24,8 @@ const strings = {
     hindex_five: "Hindex5",
     hindex_sjr: "HindexSJR",
     jif: "JIF",
-    see_all_articles: "Ver todos os artigos"
+    see_all_articles: "Ver todos os artigos",
+    topsis:"TOPSIS"
 
 
 };
