@@ -10,6 +10,7 @@
     "axios": "^0.18.0",
     "react": "16.6.3",
     "react-native": "0.58.4",
+    "react-native-elevated-view": "0.0.6",
     "react-native-firebase": "^5.2.2",
     "react-native-modal": "^7.0.2",
     "react-native-pdf": "^5.0.11",
