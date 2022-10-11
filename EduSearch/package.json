@@ -9,7 +9,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "react": "16.6.3",
-    "react-native": "0.58.4",
+    "react-native": "0.70.2",
     "react-native-elevated-view": "0.0.6",
     "react-native-firebase": "^5.2.2",
     "react-native-modal": "^7.0.2",
